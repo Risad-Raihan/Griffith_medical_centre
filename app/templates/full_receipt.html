@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Full Receipt</title>
+</head>
+<body>
+    <!-- Header Section -->
+    <h1 style="text-align: center;">Griffith Medical Centre</h1>
+    <p style="text-align: center;">Address: 1 Animoo Ave, Griffith NSW 2680, Australia</p>
+    <p style="text-align: center;">Phone: +61 2 6964 5888</p>
+
+    <!-- Invoice Details -->
+    <h2>Invoice Details</h2>
+    <p><strong>Invoice Number:</strong> {{ invoice.InvNumber }}</p>
+    <p><strong>Invoice Date Issued:</strong> {{ invoice.InvDate }}</p>
+    <p><strong>Payment Period:</strong> {{ pay_period.Period_Start_Date }} to {{ pay_period.Period_End_Date }}</p>
+    <p><strong>Doctor's Name:</strong> {{ doctor.FirstName }} {{ doctor.LastName }}</p>
+    <p><strong>Doctor's ABN Number:</strong> {{ doctor.ABN }}</p>
+    <p><strong>Doctor's Address:</strong> {{ doctor.Address }}, {{ doctor.City }}, {{ doctor.State }} {{ doctor.Postcode }}</p>
+
+    <!-- Billing Details -->
+    <h2>Billing Details</h2>
+    <table border="1" width="100%">
+        <thead>
+            <tr>
+                <th>Billing Date</th>
+                <th>Billing Type</th>
+                <th>Billing Reference</th>
+                <th>Billing Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for billing in billings %}
+            <tr>
+                <td>{{ billing.BillingDate }}</td>
+                <td>{{ billing.BillingType }}</td>
+                <td>{{ billing.BillingRef }}</td>
+                <td>{{ billing.BillingAmount }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="3" style="text-align: right;"><strong>Total Billing Amount:</strong></td>
+                <td>{{ total_billing }}</td>
+            </tr>
+        </tfoot>
+    </table>
+
+    <!-- Discount and Net Payment Details -->
+    <h2>Discounts and Net Payment</h2>
+    <p><strong>Facility Fee:</strong> {{ facility_fee_amount }}</p>
+    <p><strong>GST:</strong> {{ gst_amount }}</p>
+    <p><strong>Total Deductions:</strong> {{ total_deductions }}</p>
+    <p><strong>Net Payment:</strong> {{ net_payment }}</p>
+</body>
+</html>
