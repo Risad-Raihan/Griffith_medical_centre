@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Invoice</title>
+</head>
+<body>
+    <h1>Create Invoice</h1>
+    <form method="POST" action="{{ url_for('main.create_invoice') }}">
+        <label for="inv_number">Invoice Number:</label>
+        <input type="text" name="inv_number" id="inv_number" required>
+    
+        <label for="inv_date">Invoice Date:</label>
+        <input type="date" name="inv_date" id="inv_date" required>
+    
+        <label for="paid_date">Paid Date:</label>
+        <input type="date" name="paid_date" id="paid_date">
+    
+        <label for="pay_period">Pay Period:</label>
+        <select name="pay_period" id="pay_period" required>
+            <option value="" disabled selected>Select Pay Period</option>
+            {% for period in pay_periods %}
+                <option value="{{ period.PeriodSerial }}">
+                    {{ period.Period_Start_Date }} to {{ period.Period_End_Date }}
+                </option>
+            {% endfor %}
+        </select>
+    
+        <label for="doctor">Doctor:</label>
+        <select name="doctor" id="doctor" required>
+            <option value="" disabled selected>Select Doctor</option>
+            {% for doctor in doctors %}
+                <option value="{{ doctor.EmpID }}">
+                    {{ doctor.FirstName }} {{ doctor.LastName }}
+                </option>
+            {% endfor %}
+        </select>
+    
+        <label for="facility_fee">Facility Fee:</label>
+        <input type="text" name="facility_fee" id="facility_fee" readonly>
+    
+        <label for="gst">GST:</label>
+        <input type="text" name="gst" id="gst" readonly>
+    
+        <button type="submit">Create Invoice</button>
+    </form>
+    
+    <script>
+        document.querySelector('[name="doctor"]').addEventListener('change', async function () {
+            const doctorId = this.value; // Get the selected doctor's ID
+            const response = await fetch(`/get_doctor_details/${doctorId}`); // Fetch details from the server
+            const data = await response.json();
+    
+            // Update Facility Fee and GST fields
+            document.getElementById('facility_fee').value = data.facility_fee;
+            document.getElementById('gst').value = data.gst;
+        });
+    </script>
+    
+</body>
+</html>
