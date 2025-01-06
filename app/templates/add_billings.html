@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Billings</title>
+</head>
+<body>
+    <h1>Add Billings for Invoice #{{ invoice.InvNumber }}</h1>
+
+    <!-- Form for Adding Billing -->
+    <form method="POST">
+        <label for="billing_date">Billing Date:</label>
+        <input type="date" name="billing_date" required><br>
+
+        <label for="billing_type">Billing Type:</label>
+        <select name="billing_type" required>
+            <option value="Private Billings">Private Billings</option>
+            <option value="Medicare Payments">Medicare Payments</option>
+        </select><br>
+
+        <label for="billing_ref">Billing Reference:</label>
+        <input type="text" name="billing_ref"><br>
+
+        <label for="billing_amount">Billing Amount:</label>
+        <input type="number" name="billing_amount" step="0.01" required><br>
+
+        <button type="submit">Add Billing</button>
+    </form>
+
+    <h2>Existing Billings</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Billing Date</th>
+                <th>Billing Type</th>
+                <th>Billing Ref</th>
+                <th>Billing Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for billing in billings %}
+            <tr>
+                <td>{{ billing.BillingDate }}</td>
+                <td>{{ billing.BillingType }}</td>
+                <td>{{ billing.BillingRef }}</td>
+                <td>{{ billing.BillingAmount }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div id="flash-message">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+
+    <form action="{{ url_for('main.full_receipt', invoice_id=invoice_id) }}" method="GET">
+        <button type="submit">Final Receipt</button>
+    </form>
+    
+
+   
+    
+    <script>
+        // Check if there's a flash message
+        const flashMessages = document.querySelectorAll('.alert');
+        if (flashMessages.length > 0) {
+            // Show the pop-up for 5 seconds and then hide it
+            setTimeout(() => {
+                flashMessages.forEach((msg) => {
+                    msg.style.display = 'none';
+                });
+            }, 5000);
+        }
+    </script>
+    
+</body>
+</html>
